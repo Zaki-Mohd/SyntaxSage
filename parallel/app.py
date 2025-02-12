@@ -65,7 +65,6 @@ def analyze_code():
     if not code:
         return Response("No code provided.", status=400, mimetype='text/plain')
 
-    # Create a ThreadPoolExecutor to run analyses in parallel
     with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
         # Create partial functions with the code parameter
         analysis_functions = [
@@ -89,7 +88,6 @@ def analyze_code():
             "complexity": "Complexity analysis failed"
         }
 
-        # Collect results as they complete
         for future in concurrent.futures.as_completed(future_to_analysis):
             analysis_name = future_to_analysis[future]
             try:
@@ -97,7 +95,6 @@ def analyze_code():
             except Exception as e:
                 results[analysis_name] = f"Error in {analysis_name}: {str(e)}"
 
-    # Format the response as HTML
     response_html = f"""
     <div class="analysis-results">
         <div class="execution">
